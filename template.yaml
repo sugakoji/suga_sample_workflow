@@ -7,5 +7,5 @@ Resources:
     Type: "AWS::Serverless::StateMachine"
     Properties:
       RoleArn: "arn:aws:iam::572863632856:role/service-role/StepFunctions-MyStateMachine-y4p0buz3q-role-0a724x17t"
-      DefinitionUri: workflow/hello.json
+      DefinitionUri: "workflow/hello.json"
       StateMachineName: "sample-step-funcitons"
