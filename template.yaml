@@ -7,7 +7,7 @@ Resources:
     Type: "AWS::Serverless::StateMachine"
     Properties:
       Name: "SampleWorkFlow"
-      Role: "arn:aws:iam::572863632856:role/service-role/StepFunctions-MyStateMachine-y4p0buz3q-role-0a724x17t"
+      Role: !GetAtt [StatesExecutionRole, Arn]
       DefinitionUri: "workflow/hello.yaml"
       DefinitionSubstitutions:
         lambdaArn: !GetAtt [MyLambdaFunction, Arn]
