@@ -1,0 +1,39 @@
+name: "Deploy (development)"
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ws-west-2
+
+concurrency:
+  group: dev-deploy
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+      - uses: aws-actions/setup-sam@v2
+      - uses: docker/setup-buildx-action@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Get AWS_ACCOUNT_ID
+        run: echo "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)" >> $GITHUB_ENV
+      - name: SAM build
+        run: sam build --parallel
+      - name: SAM Deploy
+        run: |
+          sam deploy \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset \
+            --stack-name suga-sample-workflow \
+            --s3-bucket suga-sample-workflow-cf-template-bucket \
+            --config-env dev \
+            --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+            --region ${{ env.AWS_REGION }}
