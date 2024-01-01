@@ -34,7 +34,7 @@ Resources:
           import time
 
           def lambda_handler(event, context):
-              sleep(60)
+              time.sleep(60)
               return {
                   'statusCode': 200,
                   'body': json.dumps('Hello from Lambda!')
