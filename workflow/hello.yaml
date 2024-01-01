@@ -5,3 +5,4 @@ States:
     Type: Task
     Resource: ${lambdaArn}
     End: true
+TimeoutSeconds: 10

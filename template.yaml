@@ -30,11 +30,17 @@ Resources:
       Role: !GetAtt [LambdaExecutionRole, Arn]
       Code:
         ZipFile: |
-          exports.handler = (event, context, callback) => {
-              callback(null, "Hello World!");
-          };
-      Runtime: "nodejs18.x"
-      Timeout: "25"
+          import json
+          import time
+
+          def lambda_handler(event, context):
+              sleep(60)
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('Hello from Lambda!')
+              }
+      Runtime: "python3.8"
+      Timeout: "60"
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
